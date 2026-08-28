@@ -122,6 +122,7 @@ class FinancialStateLoader:
         )
 
         return FinancialState(
+            as_of_date=cash.as_of_date,
             current_cash=cash.current_cash,
             restricted_cash=cash.restricted_cash,
             protected_cash=cash.protected_cash,
