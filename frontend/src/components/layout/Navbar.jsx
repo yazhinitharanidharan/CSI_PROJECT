@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <header className="navbar">
       <Link to="/" className="navbar-logo">
-        LiquidityOS
+        Zypher Capital
       </Link>
 
       <nav className="navbar-links">

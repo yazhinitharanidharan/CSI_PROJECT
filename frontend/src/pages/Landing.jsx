@@ -2,6 +2,9 @@ import Navbar from "../components/layout/Navbar";
 import Hero from "../components/landing/Hero";
 import ProblemSection from "../components/landing/ProblemSection";
 import IntelligenceSection from "../components/landing/IntelligenceSection";
+import MonteCarloSection from "../components/landing/MonteCarloSection";
+import ReoptimizationSection from "../components/landing/ReoptimizationSection";
+import FinalCTA from "../components/landing/FinalCTA";
 
 function Landing() {
   return (
@@ -10,45 +13,32 @@ function Landing() {
 
       <main>
         <Hero />
+
         <ProblemSection />
+
         <IntelligenceSection />
 
-        <section
-          id="how-it-works"
-          className="section"
-        >
+        <MonteCarloSection />
+
+        <ReoptimizationSection />
+
+        <FinalCTA />
+
+        <section id="how-it-works" className="section">
           <p className="section-eyebrow">
-            HOW IT WORKS
+            HOW ZYPHER THINKS
           </p>
 
           <h2>
-            Simulate. Evaluate. Decide.
+            From financial data
+            <br />
+            to an informed decision.
           </h2>
 
           <p>
-            LiquidityOS combines financial information,
-            uncertainty and business constraints to
-            continuously evaluate deployment decisions.
-          </p>
-        </section>
-
-        <section
-          id="reoptimization"
-          className="section"
-        >
-          <p className="section-eyebrow">
-            ADAPTIVE DECISION MAKING
-          </p>
-
-          <h2>
-            When reality changes,
-            the decision changes.
-          </h2>
-
-          <p>
-            When an interrupt or financial event occurs,
-            LiquidityOS can re-evaluate the situation and
-            produce a new recommendation.
+            Zypher Capital evaluates your current liquidity,
+            future obligations, receivables and uncertainty
+            before determining what capital can safely be deployed.
           </p>
         </section>
       </main>
