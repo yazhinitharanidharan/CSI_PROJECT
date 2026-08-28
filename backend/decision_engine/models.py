@@ -19,7 +19,8 @@ from typing import Any, Optional
 class ActionType(str, Enum):
     """Types of actions that can be considered for an invoice."""
 
-    PAY = "pay"
+    PAY_MATURITY = "pay_maturity"
+    PAY = "pay_maturity"
     DEFER = "defer"
     FINANCE = "finance"
     RETAIN = "retain"
@@ -32,6 +33,7 @@ class FundingSource(str, Enum):
     CASH = "cash"
     BANK = "bank"
     SUPPLIER_FINANCE = "supplier_finance"
+    SUPPLIER = "supplier_finance"
 
 
 @dataclass(frozen=True)
@@ -116,7 +118,7 @@ class PaymentDecision:
     """
 
     invoice_id: str
-    action: ActionType
+    action_type: ActionType
     scheduled_date: date
     amount: Decimal
 
@@ -125,6 +127,10 @@ class PaymentDecision:
     discount_value: Decimal = Decimal("0")
     penalty_avoided: Decimal = Decimal("0")
     financing_cost: Decimal = Decimal("0")
+    discount_savings: Decimal = Decimal("0")
+    penalty_cost: Decimal = Decimal("0")
+    supplier_risk_cost: Decimal = Decimal("0")
+    liquidity_impact: Decimal = Decimal("0")
 
     priority_score: Decimal = Decimal("0")
     supplier_risk_impact: Decimal = Decimal("0")
@@ -150,6 +156,15 @@ class PaymentDecision:
 
         if self.financing_cost < Decimal("0"):
             raise ValueError("financing_cost cannot be negative.")
+
+        if self.discount_savings < Decimal("0"):
+            raise ValueError("discount_savings cannot be negative.")
+
+        if self.penalty_cost < Decimal("0"):
+            raise ValueError("penalty_cost cannot be negative.")
+
+        if self.supplier_risk_cost < Decimal("0"):
+            raise ValueError("supplier_risk_cost cannot be negative.")
 
     @property
     def net_financial_benefit(self) -> Decimal:
@@ -177,11 +192,23 @@ class FinancingDecision:
     funding_source: FundingSource
 
     amount: Decimal
-    scheduled_date: date
+    scheduled_date: Optional[date] = None
 
     interest_cost: Decimal = Decimal("0")
     fixed_fee: Decimal = Decimal("0")
-    total_financing_cost: Decimal = Decimal("0")
+    financing_cost: Decimal = Decimal("0")
+
+    remaining_limit: Decimal = Decimal("0")
+    risk_exposure: Decimal = Decimal("0")
+
+    approval_required: bool = False
+
+    rationale: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def total_financing_cost(self) -> Decimal:
+        """Backward-compatible total financing cost."""
+        return self.financing_cost
 
     remaining_limit: Decimal = Decimal("0")
     risk_exposure: Decimal = Decimal("0")
@@ -207,9 +234,9 @@ class FinancingDecision:
         if self.fixed_fee < Decimal("0"):
             raise ValueError("fixed_fee cannot be negative.")
 
-        if self.total_financing_cost < Decimal("0"):
+        if self.financing_cost < Decimal("0"):
             raise ValueError(
-                "total_financing_cost cannot be negative."
+                "financing_cost cannot be negative."
             )
 
         if self.remaining_limit < Decimal("0"):
