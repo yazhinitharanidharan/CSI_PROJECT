@@ -212,3 +212,59 @@ def test_critical_supplier_has_high_criticality():
     )
 
     assert result.criticality_score >= 75
+def test_supplier_agent_returns_decision_engine_ready_output():
+    supplier = SupplierProfile(
+        id="supplier-001",
+        name="Critical Supplier",
+        strategic_importance=90,
+        substitutability_score=10,
+        lead_time_days=30,
+        payment_terms_days=30,
+        spend_concentration=85,
+        distress_score=80,
+    )
+
+    agent = SupplierIntelligenceAgent()
+
+    result = agent.analyze(
+        supplier=supplier,
+        suppliers=[supplier],
+        dependencies=[],
+        payment_history=[],
+    )
+
+    assert result.supplier_id == "supplier-001"
+    assert result.supplier_name == "Critical Supplier"
+    assert result.criticality_score is not None
+    assert result.distress_score is not None
+    assert result.disruption_probability is not None
+    assert result.cascade_risk_score is not None
+    assert result.risk_level is not None
+def test_supplier_agent_returns_decision_engine_ready_output():
+    supplier = SupplierProfile(
+        id="supplier-001",
+        name="Critical Supplier",
+        strategic_importance=90,
+        substitutability_score=10,
+        lead_time_days=30,
+        payment_terms_days=30,
+        spend_concentration=85,
+        distress_score=80,
+    )
+
+    agent = SupplierIntelligenceAgent()
+
+    result = agent.analyze(
+        supplier=supplier,
+        suppliers=[supplier],
+        dependencies=[],
+        payment_history=[],
+    )
+
+    assert result.supplier_id == "supplier-001"
+    assert result.supplier_name == "Critical Supplier"
+    assert result.criticality_score is not None
+    assert result.distress_score is not None
+    assert result.disruption_probability is not None
+    assert result.cascade_risk_score is not None
+    assert result.risk_level is not None
