@@ -9,6 +9,7 @@ import { useAuth } from "../hooks/useAuth";
 const API_URL =
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
+
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -40,6 +41,68 @@ function riskClass(value) {
 
 function Dashboard() {
   const { user, signOut } = useAuth();
+  const [automation, setAutomation] = useState(null);
+  const [automationLoading, setAutomationLoading] = useState(false);
+  const [automationError, setAutomationError] = useState("");
+
+  const fetchAutomationStatus = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/automation/status`
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Automation status returned ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+      setAutomation(data);
+    } catch (err) {
+      console.error(err);
+      setAutomationError(
+        err.message || "Unable to load automation status."
+      );
+    }
+  }, []);
+
+  const runAutomationCheck = useCallback(async () => {
+    try {
+      setAutomationLoading(true);
+      setAutomationError("");
+
+      const response = await fetch(
+        `${API_URL}/api/automation/check`,
+        {
+          method: "POST",
+        }
+      );
+
+      const body = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(
+          body?.detail ||
+            `Automation check failed with ${response.status}`
+        );
+      }
+
+      setAutomation(body.status);
+
+      if (body.result) {
+        setReoptimization(body.result);
+      }
+    } catch (err) {
+      console.error(err);
+      setAutomationError(
+        err.message || "Unable to run automation check."
+      );
+    } finally {
+      setAutomationLoading(false);
+    }
+  }, []);
+
 
   // =========================================================
   // CORE STATE
@@ -349,17 +412,19 @@ function Dashboard() {
     fetchInvoices();
     fetchSuppliers();
     fetchFinancingOptions();
+    fetchAutomationStatus();
   }, [
     fetchFinancialState,
     fetchInvoices,
     fetchSuppliers,
     fetchFinancingOptions,
+    fetchAutomationStatus,
   ]);
 
   // =========================================================
   // FORECAST
   // =========================================================
-
+  
   async function runForecast() {
     const days = Number(forecastDays);
 
@@ -650,6 +715,7 @@ function Dashboard() {
       setReoptimizationLoading(false);
     }
   }
+
 
   // =========================================================
   // FINANCING ENGINE
@@ -972,6 +1038,9 @@ function Dashboard() {
           </a>
           <a href="#reoptimization">
             Re-optimization
+          </a>
+          <a href="#automation">
+            Automation
           </a>
           <a href="#advanced-engines">
             Financial Engines
@@ -1963,6 +2032,189 @@ function Dashboard() {
                     </div>
                   </div>
                 )}
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* AUTOMATION MONITOR */}
+        <section
+          id="automation"
+          className="dashboard-section"
+        >
+          <div className="dashboard-section-heading">
+            <p className="section-eyebrow">
+              AUTOMATION
+            </p>
+
+            <h2>Continuous financial monitoring</h2>
+
+            <p className="dashboard-section-description">
+              The system monitors financial-state changes and
+              automatically runs the financial intelligence pipeline
+              when a material change is detected.
+            </p>
+          </div>
+
+          <div className="tool-panel">
+            <div className="automation-status">
+              <div>
+                <span className="automation-badge">
+                  {automation?.running
+                    ? "● MONITORING ACTIVE"
+                    : "○ MONITORING INACTIVE"}
+                </span>
+
+                <h3>
+                  {automation?.running
+                    ? "Automation is running"
+                    : "Automation is not running"}
+                </h3>
+
+                <p>
+                  Checks every{" "}
+                  {automation?.poll_seconds || 60} seconds.
+                </p>
+
+                {automation?.last_check && (
+                  <p>
+                    Last check:{" "}
+                    {new Date(
+                      automation.last_check
+                    ).toLocaleString()}
+                  </p>
+                )}
+              </div>
+
+              <button
+                className="dashboard-button"
+                onClick={runAutomationCheck}
+                disabled={automationLoading}
+              >
+                {automationLoading
+                  ? "Checking..."
+                  : "Check now"}
+              </button>
+            </div>
+
+            {automationError && (
+              <p className="form-message error-message">
+                {automationError}
+              </p>
+            )}
+
+            {automation?.last_event && (
+              <div className="automation-event-card">
+                <p className="section-eyebrow">
+                  AUTOMATED EVENT
+                </p>
+
+                <h3>
+                  {automation.last_event.description}
+                </h3>
+
+                <p>
+                  The system detected a real change and
+                  automatically triggered the financial
+                  intelligence pipeline.
+                </p>
+              </div>
+            )}
+
+            {automation?.last_result && (
+              <>
+                <div className="result-grid">
+                  <div className="result-item">
+                    <span>Minimum cash</span>
+
+                    <strong>
+                      {formatCurrency(
+                        automation.last_result.forecast
+                          ?.minimum_cash
+                      )}
+                    </strong>
+                  </div>
+
+                  <div className="result-item">
+                    <span>Reserve breach</span>
+
+                    <strong>
+                      {automation.last_result.forecast
+                        ?.reserve_breach
+                        ? "YES"
+                        : "NO"}
+                    </strong>
+                  </div>
+
+                  <div className="result-item">
+                    <span>Survival horizon</span>
+
+                    <strong>
+                      {
+                        automation.last_result.forecast
+                          ?.survival_horizon_days
+                      }{" "}
+                      days
+                    </strong>
+                  </div>
+
+                  <div className="result-item">
+                    <span>Top priority</span>
+
+                    <strong>
+                      {
+                        automation.last_result.top_priority
+                          ?.invoice_id
+                      }
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="decision-result">
+                  <div className="decision-result-header">
+                    <div>
+                      <span className="section-eyebrow">
+                        AUTOMATED RESPONSE
+                      </span>
+
+                      <h3>
+                        Updated financial priorities
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="action-list">
+                    {(
+                      automation.last_result.priorities || []
+                    ).map((item, index) => (
+                      <div
+                        className="action-row"
+                        key={item.invoice_id}
+                      >
+                        <div>
+                          <span>
+                            #{index + 1}{" "}
+                            {item.invoice_id}
+                          </span>
+
+                          <small>
+                            Urgency: {item.urgency}
+                          </small>
+                        </div>
+
+                        <div>
+                          <strong>
+                            Score: {item.score}
+                          </strong>
+
+                          <small>
+                            Automatically recalculated
+                          </small>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </>
             )}
           </div>
