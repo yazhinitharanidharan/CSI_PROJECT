@@ -9,7 +9,7 @@ and builds a single FinancialState object.
 import json
 from pathlib import Path
 
-from models.schemas import (
+from backend.models.schemas import (
     CashPosition,
     FinancialState,
     FinancingOption,
