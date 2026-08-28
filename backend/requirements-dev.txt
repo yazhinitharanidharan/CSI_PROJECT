@@ -1,0 +1,5 @@
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pip-audit>=2.0.0
+# Add any other development dependencies your backend needs
+-r requirements.txt
