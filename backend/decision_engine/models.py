@@ -72,8 +72,12 @@ class Action:
         if not self.invoice_id:
             raise ValueError("invoice_id cannot be empty.")
 
-        if self.amount <= Decimal("0"):
-            raise ValueError("amount must be greater than zero.")
+        if self.action_type == ActionType.RETAIN:
+            if self.amount < Decimal("0"):
+                raise ValueError("amount cannot be negative.")
+        else:
+            if self.amount <= Decimal("0"):
+                raise ValueError("amount must be greater than zero.")
 
         if self.discount_value < Decimal("0"):
             raise ValueError("discount_value cannot be negative.")

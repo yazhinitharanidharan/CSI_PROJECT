@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/layout/Navbar";
 import { useAuth } from "../hooks/useAuth";
 
 function Login() {
@@ -14,19 +15,19 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
+  function handleChange(event) {
+    const { name, value } = event.target;
 
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((previous) => ({
+      ...previous,
       [name]: value,
     }));
 
     setError("");
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
 
     const { email, password } = formData;
 
@@ -40,7 +41,6 @@ function Login() {
       setError("");
 
       await signIn(email, password);
-
       navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Unable to sign in.");
@@ -50,50 +50,75 @@ function Login() {
   }
 
   return (
-    <main>
-      <h1>Welcome back</h1>
+    <div className="auth-page">
+      <Navbar />
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
+      <main className="auth-shell">
+        <section className="auth-card">
+          <div className="auth-heading">
+            <p className="section-eyebrow">ZYPHER CAPITAL</p>
 
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="you@example.com"
-            autoComplete="email"
-          />
-        </div>
+            <h1>Welcome back</h1>
 
-        <div>
-          <label htmlFor="password">Password</label>
+            <p>
+              Sign in to continue to your financial intelligence command
+              center.
+            </p>
+          </div>
 
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-            autoComplete="current-password"
-          />
-        </div>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="form-field">
+              <label htmlFor="email">Email</label>
 
-        {error && <p>{error}</p>}
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
+              />
+            </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
-      </form>
+            <div className="form-field">
+              <label htmlFor="password">Password</label>
 
-      <p>
-        Don't have an account?{" "}
-        <Link to="/signup">Create one</Link>
-      </p>
-    </main>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                required
+              />
+            </div>
+
+            {error && (
+              <p className="form-message error-message">
+                {error}
+              </p>
+            )}
+
+            <button
+              className="auth-submit"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            <span>Don't have an account?</span>{" "}
+            <Link to="/signup">Create one</Link>
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
 

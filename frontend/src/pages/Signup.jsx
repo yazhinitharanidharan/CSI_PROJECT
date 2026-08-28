@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/layout/Navbar";
 import { useAuth } from "../hooks/useAuth";
 
 function Signup() {
@@ -16,11 +17,11 @@ function Signup() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  function handleChange(e) {
-    const { name, value } = e.target;
+  function handleChange(event) {
+    const { name, value } = event.target;
 
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((previous) => ({
+      ...previous,
       [name]: value,
     }));
 
@@ -28,8 +29,8 @@ function Signup() {
     setSuccess("");
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
 
     const { email, password, confirmPassword } = formData;
 
@@ -70,68 +71,91 @@ function Signup() {
   }
 
   return (
-    <main>
-      <h1>Create your account</h1>
+    <div className="auth-page">
+      <Navbar />
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
+      <main className="auth-shell">
+        <section className="auth-card signup-card">
+          <div className="auth-heading">
+            <p className="section-eyebrow">ZYPHER CAPITAL</p>
 
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="you@example.com"
-            autoComplete="email"
-          />
-        </div>
+            <h1>Create your account</h1>
 
-        <div>
-          <label htmlFor="password">Password</label>
+            <p>
+              Build a smarter financial command center for your business.
+            </p>
+          </div>
 
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-            autoComplete="new-password"
-          />
-        </div>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="form-field">
+              <label htmlFor="email">Email</label>
 
-        <div>
-          <label htmlFor="confirmPassword">
-            Confirm password
-          </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
+              />
+            </div>
 
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm your password"
-            autoComplete="new-password"
-          />
-        </div>
+            <div className="form-field">
+              <label htmlFor="password">Password</label>
 
-        {error && <p>{error}</p>}
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                autoComplete="new-password"
+                required
+              />
+            </div>
 
-        {success && <p>{success}</p>}
+            <div className="form-field">
+              <label htmlFor="confirmPassword">Confirm password</label>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating account..." : "Create account"}
-        </button>
-      </form>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                autoComplete="new-password"
+                required
+              />
+            </div>
 
-      <p>
-        Already have an account?{" "}
-        <Link to="/login">Log in</Link>
-      </p>
-    </main>
+            {error && (
+              <p className="form-message error-message">{error}</p>
+            )}
+
+            {success && (
+              <p className="form-message success-message">{success}</p>
+            )}
+
+            <button
+              className="auth-submit"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Creating account..." : "Create account"}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            <span>Already have an account?</span>{" "}
+            <Link to="/login">Log in</Link>
+          </div>
+        </section>
+      </main>
+    </div>
   );
 }
 

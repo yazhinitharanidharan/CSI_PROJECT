@@ -8,7 +8,7 @@ a requested number of days.
 from datetime import timedelta
 from decimal import Decimal
 
-from models.schemas import FinancialState, ForecastDay, ForecastResult
+from backend.models.schemas import FinancialState, ForecastDay, ForecastResult
 
 
 class ForecastEngine:
