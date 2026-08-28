@@ -6,7 +6,7 @@ This module:
 - Calculates deterministic invoice priority scores.
 - Ranks invoices.
 - Builds a heap-based priority queue.
-- Re-ranks invoices when their financial conditions change.
+- Re-ranks invoices when financial conditions change.
 
 IMPORTANT:
     The priority engine only determines the order in which invoices
@@ -14,15 +14,18 @@ IMPORTANT:
 
     It does NOT make the final payment or financing decision.
 
-    Final decisions will later be made after applying hard constraints,
-    the Liquidity Firewall, mandatory obligations, candidate-plan
-    evaluation, and optimization.
+    Final decisions will later be made after applying:
+    - hard constraints
+    - Liquidity Firewall
+    - mandatory obligations
+    - candidate-plan evaluation
+    - optimization
 """
 
 from dataclasses import dataclass
 from decimal import Decimal
 import heapq
-from typing import Any, Optional
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -30,25 +33,27 @@ class InvoicePriorityInput:
     """
     Input data required to calculate an invoice priority.
 
-    Financial values should be supplied as Decimal values.
+    Financial values must be supplied as Decimal values.
 
-    Supplier-risk values follow the Supplier Intelligence Agent
-    contract where applicable.
+    Supplier-risk values can be supplied by the Supplier Risk Adapter.
     """
 
     invoice_id: str
 
+    # Financial factors
     discount_value: Decimal = Decimal("0")
     financing_cost: Decimal = Decimal("0")
     penalty_risk: Decimal = Decimal("0")
 
+    # Supplier factors
     supplier_criticality: Decimal = Decimal("0")
     supplier_liquidity_need: Decimal = Decimal("0")
 
+    # Invoice timing
     urgency: Decimal = Decimal("0")
 
     def __post_init__(self) -> None:
-        """Validate priority input values."""
+        """Validate invoice priority input values."""
 
         if not self.invoice_id:
             raise ValueError(
@@ -96,10 +101,10 @@ class InvoicePriorityInput:
 @dataclass(frozen=True)
 class PriorityWeights:
     """
-    Weights used by the deterministic priority formula.
+    Configurable weights used by the deterministic priority formula.
 
-    The weights can be changed by the application configuration
-    without changing the priority calculation logic.
+    The weights allow the team to tune the importance of each factor
+    without changing the calculation logic.
     """
 
     discount: Decimal = Decimal("1")
@@ -151,19 +156,15 @@ def calculate_urgency(
 
     The closer an invoice is to its due date, the higher its urgency.
 
-    If the invoice is already overdue, urgency is 100.
-
-    If no permissible delay is available, an invoice that reaches
-    its due date is treated as fully urgent.
+    An overdue invoice receives maximum urgency.
 
     Args:
         days_until_due:
             Number of days until the invoice due date.
-            Negative values mean the invoice is overdue.
+            Negative values indicate that the invoice is overdue.
 
         permissible_delay_days:
-            Number of additional days the invoice can legally/
-            contractually be delayed.
+            Number of additional days the invoice can be delayed.
 
     Returns:
         Urgency score between 0 and 100.
@@ -174,12 +175,15 @@ def calculate_urgency(
             "permissible_delay_days cannot be negative."
         )
 
+    # Already due or overdue.
     if days_until_due <= 0:
         return Decimal("100.0000")
 
-    # If there is no permissible delay, urgency increases as the
-    # invoice approaches maturity.
+    # No contractual delay period.
+    #
+    # Urgency increases as the invoice approaches maturity.
     if permissible_delay_days == 0:
+
         if days_until_due >= 30:
             return Decimal("10.0000")
 
@@ -197,6 +201,8 @@ def calculate_urgency(
             urgency.quantize(Decimal("0.0001")),
         )
 
+    # When permissible delay exists, urgency considers the complete
+    # window from today until the end of the permissible delay period.
     total_window = (
         days_until_due
         + permissible_delay_days
@@ -251,7 +257,7 @@ def calculate_priority_score(
             Monetary value of an available early-payment discount.
 
         financing_cost:
-            Expected cost of financing the invoice.
+            Expected financing cost.
 
         penalty_risk:
             Normalized penalty risk between 0 and 1.
@@ -262,11 +268,15 @@ def calculate_priority_score(
         supplier_liquidity_need:
             Supplier liquidity-need score between 0 and 100.
 
+            In the current MVP integration, this value may be derived
+            from the Supplier Intelligence Agent's distress_score by
+            the Supplier Risk Adapter.
+
         urgency:
             Invoice urgency score between 0 and 100.
 
         weights:
-            Optional configurable weights.
+            Optional configurable priority weights.
 
     Returns:
         Deterministic priority score.
@@ -324,13 +334,13 @@ def rank_invoices(
     weights: Optional[PriorityWeights] = None,
 ) -> list[InvoicePriority]:
     """
-    Calculate and rank all invoices by priority score.
+    Calculate and rank invoices by priority score.
 
     Higher-priority invoices appear first.
 
     Args:
         invoices:
-            Invoice priority inputs.
+            List of invoice priority inputs.
 
         weights:
             Optional priority weights.
@@ -343,6 +353,7 @@ def rank_invoices(
     priorities: list[InvoicePriority] = []
 
     for invoice in invoices:
+
         score = calculate_priority_score(
             discount_value=invoice.discount_value,
             financing_cost=invoice.financing_cost,
@@ -373,6 +384,10 @@ def rank_invoices(
             )
         )
 
+    # Sort from highest score to lowest score.
+    #
+    # invoice_id provides deterministic ordering when two invoices
+    # have exactly the same score.
     priorities.sort(
         key=lambda item: (
             -item.priority_score,
@@ -391,22 +406,25 @@ def build_priority_queue(
     """
     Build a heap-based priority queue.
 
-    Python's heapq implements a min-heap, so the negative priority
-    score is stored to make the highest priority invoice appear first.
+    Python's heapq is a min-heap. Therefore, the priority score is
+    stored as a negative value so that the invoice with the highest
+    actual score is removed first.
 
-    The invoice ID is included as a deterministic tie-breaker.
+    Tuple structure:
+
+        (-priority_score, invoice_id, InvoicePriority)
+
+    The invoice ID acts as a deterministic tie-breaker.
 
     Args:
         invoices:
-            Invoice priority inputs.
+            List of invoice priority inputs.
 
         weights:
             Optional priority weights.
 
     Returns:
-        Heap containing tuples of:
-
-            (-priority_score, invoice_id, InvoicePriority)
+        Heap containing invoice priorities.
     """
 
     priorities = rank_invoices(
@@ -419,6 +437,7 @@ def build_priority_queue(
     ] = []
 
     for priority in priorities:
+
         heapq.heappush(
             priority_queue,
             (
@@ -437,14 +456,17 @@ def pop_highest_priority(
     ],
 ) -> Optional[InvoicePriority]:
     """
-    Remove and return the highest-priority invoice from the heap.
+    Remove and return the highest-priority invoice.
+
+    This operation uses heapq.heappop(), giving O(log n)
+    heap-removal complexity.
 
     Args:
         priority_queue:
             Heap created by build_priority_queue().
 
     Returns:
-        Highest-priority InvoicePriority, or None if the heap is empty.
+        Highest-priority invoice, or None if the heap is empty.
     """
 
     if not priority_queue:
@@ -462,16 +484,16 @@ def re_rank_invoices(
     weights: Optional[PriorityWeights] = None,
 ) -> list[tuple[Decimal, str, InvoicePriority]]:
     """
-    Recalculate invoice priorities and rebuild the heap.
+    Recalculate invoice priorities and rebuild the priority queue.
 
-    This should be called when relevant financial conditions change,
-    such as:
+    Re-ranking can be triggered when financial conditions change,
+    for example:
 
-    - Receivable delays
-    - Supplier-risk changes
-    - Discount changes
-    - Financing-cost changes
-    - Invoice urgency changes
+        - receivable delays
+        - supplier-risk changes
+        - discount changes
+        - financing-cost changes
+        - invoice urgency changes
 
     Args:
         invoices:
@@ -481,7 +503,7 @@ def re_rank_invoices(
             Optional priority weights.
 
     Returns:
-        Newly constructed heap containing the updated priorities.
+        Newly constructed heap containing updated invoice priorities.
     """
 
     return build_priority_queue(
