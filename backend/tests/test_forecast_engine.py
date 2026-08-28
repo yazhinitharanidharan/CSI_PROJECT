@@ -1,17 +1,15 @@
 import unittest
 from datetime import date
+from decimal import Decimal
 
 from forecast_engine.forecast_engine import generate_forecast
 from models.schemas import (
-    CashPosition,
     DailyObligation,
     FinancialState,
     Invoice,
     ObligationItem,
     Receivable,
     RiskPolicy,
-    Supplier,
-    FinancingOption,
 )
 
 
@@ -68,7 +66,7 @@ class TestForecastEngine(unittest.TestCase):
 
         self.assertEqual(
             result.days[0].projected_cash,
-            800.0
+            Decimal("800.0")
         )
 
     def test_reserve_breach(self):
@@ -76,9 +74,7 @@ class TestForecastEngine(unittest.TestCase):
 
         result = generate_forecast(state, horizon_days=3)
 
-        self.assertFalse(
-            result.days[0].reserve_breach
-        )
+        self.assertFalse(result.reserve_breach)
 
     def test_forecast_horizon(self):
         state = self.create_test_state()
@@ -90,6 +86,11 @@ class TestForecastEngine(unittest.TestCase):
             10
         )
 
+        self.assertEqual(
+            result.forecast_horizon_days,
+            10
+        )
+
     def test_minimum_cash(self):
         state = self.create_test_state()
 
@@ -97,7 +98,47 @@ class TestForecastEngine(unittest.TestCase):
 
         self.assertEqual(
             result.minimum_cash,
-            800.0
+            Decimal("800.0")
+        )
+
+    def test_reserve_requirement(self):
+        state = self.create_test_state()
+
+        result = generate_forecast(state, horizon_days=3)
+
+        self.assertEqual(
+            result.reserve_requirement,
+            Decimal("500.0")
+        )
+
+    def test_forecast_metadata(self):
+        state = self.create_test_state()
+
+        result = generate_forecast(state, horizon_days=3)
+
+        self.assertEqual(
+            result.forecast_confidence,
+            Decimal("1.0")
+        )
+
+        self.assertEqual(
+            result.scenario_id,
+            "base"
+        )
+
+        self.assertEqual(
+            result.scenario_name,
+            "Base"
+        )
+
+    def test_survival_horizon(self):
+        state = self.create_test_state()
+
+        result = generate_forecast(state, horizon_days=3)
+
+        self.assertEqual(
+            result.survival_horizon_days,
+            3
         )
 
 
