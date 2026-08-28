@@ -1,0 +1,404 @@
+[
+  {
+    "date": "2026-08-28",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 276358
+      },
+      {
+        "type": "Transport",
+        "amount": 134973
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 182254
+      }
+    ],
+    "total": 593585
+  },
+  {
+    "date": "2026-08-29",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 295414
+      },
+      {
+        "type": "Transport",
+        "amount": 120457
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 35866
+      }
+    ],
+    "total": 451737
+  },
+  {
+    "date": "2026-08-30",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 21469
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 129782
+      }
+    ],
+    "total": 151251
+  },
+  {
+    "date": "2026-08-31",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 259496
+      },
+      {
+        "type": "Transport",
+        "amount": 74369
+      }
+    ],
+    "total": 333865
+  },
+  {
+    "date": "2026-09-01",
+    "items": [
+      {
+        "type": "Transport",
+        "amount": 132400
+      }
+    ],
+    "total": 132400
+  },
+  {
+    "date": "2026-09-02",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 55819
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 220535
+      }
+    ],
+    "total": 276354
+  },
+  {
+    "date": "2026-09-03",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 33401
+      }
+    ],
+    "total": 33401
+  },
+  {
+    "date": "2026-09-04",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 216089
+      }
+    ],
+    "total": 216089
+  },
+  {
+    "date": "2026-09-05",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 105448
+      },
+      {
+        "type": "Transport",
+        "amount": 240202
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 101200
+      }
+    ],
+    "total": 446850
+  },
+  {
+    "date": "2026-09-06",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 135970
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 293528
+      }
+    ],
+    "total": 429498
+  },
+  {
+    "date": "2026-09-07",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 288423
+      }
+    ],
+    "total": 288423
+  },
+  {
+    "date": "2026-09-08",
+    "items": [
+      {
+        "type": "Misc Overheads",
+        "amount": 259615
+      }
+    ],
+    "total": 259615
+  },
+  {
+    "date": "2026-09-09",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 215260
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 6130
+      }
+    ],
+    "total": 221390
+  },
+  {
+    "date": "2026-09-10",
+    "items": [
+      {
+        "type": "Transport",
+        "amount": 243555
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 296382
+      }
+    ],
+    "total": 539937
+  },
+  {
+    "date": "2026-09-11",
+    "items": [
+      {
+        "type": "Transport",
+        "amount": 104561
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 35662
+      }
+    ],
+    "total": 140223
+  },
+  {
+    "date": "2026-09-12",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 289266
+      },
+      {
+        "type": "Transport",
+        "amount": 169419
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 254974
+      }
+    ],
+    "total": 713659
+  },
+  {
+    "date": "2026-09-13",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 283463
+      },
+      {
+        "type": "Transport",
+        "amount": 271248
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 102425
+      }
+    ],
+    "total": 657136
+  },
+  {
+    "date": "2026-09-14",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 40631
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 67855
+      }
+    ],
+    "total": 108486
+  },
+  {
+    "date": "2026-09-15",
+    "items": [
+      {
+        "type": "Transport",
+        "amount": 25836
+      }
+    ],
+    "total": 25836
+  },
+  {
+    "date": "2026-09-16",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 279088
+      },
+      {
+        "type": "Transport",
+        "amount": 141716
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 169722
+      }
+    ],
+    "total": 590526
+  },
+  {
+    "date": "2026-09-17",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 212505
+      },
+      {
+        "type": "Transport",
+        "amount": 162284
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 43033
+      }
+    ],
+    "total": 417822
+  },
+  {
+    "date": "2026-09-18",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 57418
+      },
+      {
+        "type": "Transport",
+        "amount": 116754
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 74445
+      }
+    ],
+    "total": 248617
+  },
+  {
+    "date": "2026-09-19",
+    "items": [],
+    "total": 0
+  },
+  {
+    "date": "2026-09-20",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 87704
+      },
+      {
+        "type": "Transport",
+        "amount": 289802
+      }
+    ],
+    "total": 377506
+  },
+  {
+    "date": "2026-09-21",
+    "items": [],
+    "total": 0
+  },
+  {
+    "date": "2026-09-22",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 295771
+      },
+      {
+        "type": "Transport",
+        "amount": 59309
+      }
+    ],
+    "total": 355080
+  },
+  {
+    "date": "2026-09-23",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 65517
+      }
+    ],
+    "total": 65517
+  },
+  {
+    "date": "2026-09-24",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 152721
+      }
+    ],
+    "total": 152721
+  },
+  {
+    "date": "2026-09-25",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 143403
+      },
+      {
+        "type": "Transport",
+        "amount": 136659
+      }
+    ],
+    "total": 280062
+  },
+  {
+    "date": "2026-09-26",
+    "items": [
+      {
+        "type": "Utilities",
+        "amount": 227075
+      },
+      {
+        "type": "Misc Overheads",
+        "amount": 179879
+      }
+    ],
+    "total": 406954
+  }
+]
