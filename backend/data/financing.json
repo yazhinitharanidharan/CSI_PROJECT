@@ -1,0 +1,29 @@
+[
+  {
+    "financing_id": "F001",
+    "name": "Working Capital Line of Credit",
+    "type": "credit_line",
+    "max_amount": 2000000,
+    "interest_rate_annual": 0.14,
+    "repayment_days": 90,
+    "available": true
+  },
+  {
+    "financing_id": "F002",
+    "name": "Invoice Discounting",
+    "type": "invoice_discounting",
+    "max_amount": 1500000,
+    "interest_rate_annual": 0.16,
+    "repayment_days": 45,
+    "available": true
+  },
+  {
+    "financing_id": "F003",
+    "name": "Short-Term Business Loan",
+    "type": "term_loan",
+    "max_amount": 2500000,
+    "interest_rate_annual": 0.18,
+    "repayment_days": 180,
+    "available": true
+  }
+]

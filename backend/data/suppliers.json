@@ -1,0 +1,122 @@
+[
+  {
+    "supplier_id": "S001",
+    "name": "Shree Metals Pvt Ltd",
+    "category": "Mixed Scrap",
+    "payment_terms_days": 15,
+    "reliability_score": 0.71,
+    "average_lead_time_days": 6
+  },
+  {
+    "supplier_id": "S002",
+    "name": "Ganesh Alloys",
+    "category": "Aluminium",
+    "payment_terms_days": 30,
+    "reliability_score": 0.74,
+    "average_lead_time_days": 3
+  },
+  {
+    "supplier_id": "S003",
+    "name": "Coastal Copper Traders",
+    "category": "Mixed Scrap",
+    "payment_terms_days": 15,
+    "reliability_score": 0.87,
+    "average_lead_time_days": 2
+  },
+  {
+    "supplier_id": "S004",
+    "name": "Vandana Steel Corp",
+    "category": "Aluminium",
+    "payment_terms_days": 15,
+    "reliability_score": 0.76,
+    "average_lead_time_days": 10
+  },
+  {
+    "supplier_id": "S005",
+    "name": "Murugan Scrap Industries",
+    "category": "Mixed Scrap",
+    "payment_terms_days": 15,
+    "reliability_score": 0.86,
+    "average_lead_time_days": 10
+  },
+  {
+    "supplier_id": "S006",
+    "name": "Chennai Metal Works",
+    "category": "Copper",
+    "payment_terms_days": 30,
+    "reliability_score": 0.83,
+    "average_lead_time_days": 6
+  },
+  {
+    "supplier_id": "S007",
+    "name": "Bharat Recycling Co",
+    "category": "Aluminium",
+    "payment_terms_days": 30,
+    "reliability_score": 0.9,
+    "average_lead_time_days": 7
+  },
+  {
+    "supplier_id": "S008",
+    "name": "Sri Balaji Ferrous",
+    "category": "Copper",
+    "payment_terms_days": 30,
+    "reliability_score": 0.76,
+    "average_lead_time_days": 7
+  },
+  {
+    "supplier_id": "S009",
+    "name": "Om Sakthi Non-Ferrous",
+    "category": "Aluminium",
+    "payment_terms_days": 15,
+    "reliability_score": 0.81,
+    "average_lead_time_days": 7
+  },
+  {
+    "supplier_id": "S010",
+    "name": "Kaveri Metal Exports",
+    "category": "Copper",
+    "payment_terms_days": 45,
+    "reliability_score": 0.93,
+    "average_lead_time_days": 9
+  },
+  {
+    "supplier_id": "S011",
+    "name": "SS Industrial Supplies",
+    "category": "Mixed Scrap",
+    "payment_terms_days": 15,
+    "reliability_score": 0.98,
+    "average_lead_time_days": 8
+  },
+  {
+    "supplier_id": "S012",
+    "name": "Tamil Nadu Copper Mills",
+    "category": "Aluminium",
+    "payment_terms_days": 45,
+    "reliability_score": 0.94,
+    "average_lead_time_days": 7
+  },
+  {
+    "supplier_id": "S013",
+    "name": "Anand Metal Traders",
+    "category": "Mixed Scrap",
+    "payment_terms_days": 30,
+    "reliability_score": 0.9,
+    "average_lead_time_days": 2
+  },
+  {
+    "supplier_id": "S014",
+    "name": "Velan Aluminium Co",
+    "category": "Mixed Scrap",
+    "payment_terms_days": 30,
+    "reliability_score": 0.92,
+    "average_lead_time_days": 3
+  },
+  {
+    "supplier_id": "S015",
+    "name": "Sundar Industrial Corp",
+    "category": "Aluminium",
+    "payment_terms_days": 15,
+    "reliability_score": 0.81,
+    "average_lead_time_days": 9
+  }
+]
