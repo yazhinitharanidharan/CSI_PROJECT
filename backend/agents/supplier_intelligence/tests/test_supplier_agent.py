@@ -3,6 +3,7 @@ from agents.supplier_intelligence.models import (
     PaymentHistoryRecord,
     SupplierDependency,
     SupplierProfile,
+    SupplierRiskResult,
 )
 
 
@@ -268,3 +269,41 @@ def test_supplier_agent_returns_decision_engine_ready_output():
     assert result.disruption_probability is not None
     assert result.cascade_risk_score is not None
     assert result.risk_level is not None
+
+def test_supplier_risk_result_decision_engine_contract():
+    result = SupplierRiskResult(
+        supplier_id="supplier-001",
+        supplier_name="Critical Supplier",
+        criticality_score=91.5,
+        distress_score=78.0,
+        graph_centrality_score=65.0,
+        disruption_probability=0.8225,
+        cascade_risk_score=74.5,
+        dependency_count=3,
+        affected_suppliers=["supplier-002", "supplier-003"],
+        risk_level="CRITICAL",
+    )
+
+    decision_engine_payload = result.to_decision_engine_dict()
+
+    assert set(decision_engine_payload) == {
+        "supplier_id",
+        "criticality_score",
+        "distress_score",
+        "disruption_probability",
+        "cascade_risk_score",
+        "dependency_count",
+        "affected_supplier_ids",
+        "risk_level",
+    }
+    assert decision_engine_payload["supplier_id"] == "supplier-001"
+    assert decision_engine_payload["criticality_score"] == 91.5
+    assert decision_engine_payload["distress_score"] == 78.0
+    assert decision_engine_payload["disruption_probability"] == 0.8225
+    assert decision_engine_payload["cascade_risk_score"] == 74.5
+    assert decision_engine_payload["dependency_count"] == 3
+    assert decision_engine_payload["affected_supplier_ids"] == [
+        "supplier-002",
+        "supplier-003",
+    ]
+    assert decision_engine_payload["risk_level"] == "CRITICAL"

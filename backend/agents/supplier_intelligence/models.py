@@ -85,3 +85,18 @@ class SupplierRiskResult:
             "risk_level": self.risk_level,
             "data_confidence": self.data_confidence,
         }
+    def to_decision_engine_dict(self) -> dict:
+        """
+        Return the exact structured supplier-risk contract
+        expected by the Decision Engine.
+        """
+        return {
+            "supplier_id": self.supplier_id,
+            "criticality_score": self.criticality_score,
+            "distress_score": self.distress_score,
+            "disruption_probability": self.disruption_probability,
+            "cascade_risk_score": self.cascade_risk_score,
+            "dependency_count": self.dependency_count,
+            "affected_supplier_ids": self.affected_suppliers,
+            "risk_level": self.risk_level,
+        }
